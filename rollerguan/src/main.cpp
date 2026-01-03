@@ -38,9 +38,16 @@ void on_center_button() {
  */
 void initialize() {
 	pros::lcd::initialize();
-	pros::lcd::set_text(1, "Hello PROS User!");
+	pros::lcd::set_text(1, "886R RLD Robot");
 
 	pros::lcd::register_btn1_cb(on_center_button);
+	  	while (true) { // infinite loop
+        // print measurements from the adi encoder
+        pros::lcd::print(0, "ADI Encoder: %i", adi_encoder.get_value());
+        // print measurements from the rotation sensor
+        pros::lcd::print(1, "Rotation Sensor: %i", rotation_sensor.get_position());
+        pros::delay(10); // delay to save resources. DO NOT REMOVE
+    }
 }
 
 /**
