@@ -1,7 +1,19 @@
 #include "lemlib/api.hpp" // IWYU pragma: keep
 #include "main.h"
 
-
+pros::Controller master(pros::E_CONTROLLER_MASTER);
+pros::MotorGroup left_mg({-3, 2, -1}, pros::MotorGearset::blue);    	
+pros::MotorGroup right_mg({10, -9, 8}, pros::MotorGearset::blue);  
+pros::Motor top(-11);
+pros::Motor bottom(-12);
+pros::adi::Pneumatics tongue('E', false);
+pros::adi::Pneumatics centerupper('G', false);
+pros::adi::Pneumatics wing('H', true);
+pros::adi::Pneumatics pushdown('D', false);
+pros::adi::Pneumatics clamp('F', false);
+pros::Rotation rotation_horizontal(16);
+pros::Rotation rotation_vertical(4);	
+lemlib::Drivetrain drivetrain(left_mg, right_mg, 11.5, lemlib::Omniwheel::NEW_4, 343, 2);
 /**
  * A callback function for LLEMU's center button.
  *
@@ -76,21 +88,9 @@ void autonomous() {}
  * task, not resume it from where it left off.
  */
 void opcontrol() {
-	pros::Controller master(pros::E_CONTROLLER_MASTER);
-	pros::MotorGroup left_mg({-3, 2, -1});    	
-	pros::MotorGroup right_mg({10, -9, 8});  
-	pros::Motor top(-11);
-	pros::Motor bottom(-12);
-	
-	pros::adi::Pneumatics tongue('E', false);
-	pros::adi::Pneumatics centerupper('G', false);
-	pros::adi::Pneumatics wing('H', true);
-	pros::adi::Pneumatics pushdown('D', false);
-	pros::adi::Pneumatics clamp('F', false);
-
 	while (true) {
 		pros::lcd::print(0, "%d %d %d", (pros::lcd::read_buttons() & LCD_BTN_LEFT) >> 2,
-		                (pros::lcd::read_buttons() & LCD_BTN_CENTER) >> 1,
+		              	(pros::lcd::read_buttons() & LCD_BTN_CENTER) >> 1,
 		                 (pros::lcd::read_buttons() & LCD_BTN_RIGHT) >> 0);  // Prints status of the emulated screen LCDs
 		int dir = master.get_analog(ANALOG_LEFT_Y);    
 		int turn = master.get_analog(ANALOG_RIGHT_X); 
