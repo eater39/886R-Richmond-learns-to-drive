@@ -43,9 +43,9 @@ void initialize() {
 	pros::lcd::register_btn1_cb(on_center_button);
 	  	while (true) { // infinite loop
         // print measurements from the adi encoder
-        pros::lcd::print(0, "ADI Encoder: %i", adi_encoder.get_value());
+        pros::lcd::print(0, "Rotation Sensor (Vertical): %i", rotation_vertical.get_value());
         // print measurements from the rotation sensor
-        pros::lcd::print(1, "Rotation Sensor: %i", rotation_sensor.get_position());
+        pros::lcd::print(1, "Rotation Sensor (horizontal): %i", rotation_horizontal.get_position());
         pros::delay(10); // delay to save resources. DO NOT REMOVE
     }
 }
