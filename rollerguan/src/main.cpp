@@ -1,19 +1,21 @@
-#include "lemlib/api.hpp" // IWYU pragma: keep
 #include "main.h"
+//#include "lemlib/api.hpp" // IWYU pragma: keep
+
 
 pros::Controller master(pros::E_CONTROLLER_MASTER);
-pros::MotorGroup left_mg({-3, 2, -1}, pros::MotorGearset::blue);    	
-pros::MotorGroup right_mg({10, -9, 8}, pros::MotorGearset::blue);  
-pros::Motor top(-11);
-pros::Motor bottom(-12);
+pros::MotorGroup left_mg({-3, 2, -1});    	//pros::MotorGearset::blue
+pros::MotorGroup right_mg({10, -9, 8});  //pros::MotorGearset::blue
+pros::MotorGroup roller({20, -19});
+
 pros::adi::Pneumatics tongue('E', false);
 pros::adi::Pneumatics centerupper('G', false);
-pros::adi::Pneumatics wing('H', true);
-pros::adi::Pneumatics pushdown('D', false);
-pros::adi::Pneumatics clamp('F', false);
+pros::adi::Pneumatics wing('C', true);
+pros::adi::Pneumatics pushdown('F', false);
+pros::adi::Pneumatics clamp('D', false);
+pros::adi::Pneumatics gate('H', true);
 pros::Rotation rotation_horizontal(16);
 pros::Rotation rotation_vertical(4);	
-lemlib::Drivetrain drivetrain(left_mg, right_mg, 11.5, lemlib::Omniwheel::NEW_4, 343, 2);
+//emlib::Drivetrain drivetrain(left_mg, right_mg, 11.5, lemlib::Omniwheel::NEW_4, 343, 2);
 /**
  * A callback function for LLEMU's center button.
  *
@@ -38,16 +40,16 @@ void on_center_button() {
  */
 void initialize() {
 	pros::lcd::initialize();
-	pros::lcd::set_text(1, "886R RLD Robot");
+	pros::lcd::set_text(1, "886R");
 
-	pros::lcd::register_btn1_cb(on_center_button);
-	  	while (true) { // infinite loop
+	//pros::lcd::register_btn1_cb(on_center_button);
+	  	//while (true) { // infinite loop
         // print measurements from the adi encoder
-        pros::lcd::print(0, "Rotation Sensor (Vertical): %i", rotation_vertical.get_value());
+        //pros::lcd::print(0, "Rotation Sensor (Vertical): %i", rotation_vertical.get_value());
         // print measurements from the rotation sensor
-        pros::lcd::print(1, "Rotation Sensor (horizontal): %i", rotation_horizontal.get_position());
-        pros::delay(10); // delay to save resources. DO NOT REMOVE
-    }
+        //pros::lcd::print(1, "Rotation Sensor (horizontal): %i", rotation_horizontal.get_position());
+        //pros::delay(20); // delay to save resources. DO NOT REMOVE
+    //}
 }
 
 /**
@@ -104,34 +106,27 @@ void opcontrol() {
 		left_mg.move(dir + turn);                   
 		right_mg.move(dir - turn);      
 		
+		//block collection
 		//intake
-		if(master.get_digital(DIGITAL_R1))
-		{
-			bottom.move(127);
+		if (master.get_digital(DIGITAL_R1)){
+			roller.move(127);
 		}
-		else if(master.get_digital(DIGITAL_R2))
-		{
-			bottom.move(-127);
+		else if (master.get_digital(DIGITAL_R2)){
+			roller.move(-127);
 		}
-		else
-		{
-			bottom.move(0);
-
 		//outtake
+		else if (master.get_digital(DIGITAL_L1)){
+			roller.move(127);
+			gate.retract();
 		}
-		if(master.get_digital(DIGITAL_L1))
-		{
-			top.move(127);
-			bottom.move(127);
-		}
-		else if(master.get_digital(DIGITAL_L2)){
-			top.move(70);
-			bottom.move(127);
+		else if (master.get_digital(DIGITAL_L2)){
+			roller.move(60);
 			centerupper.extend();
 		}
 		else{
-			top.move(0);
+			roller.move(0);
 			centerupper.retract();
+			gate.extend();
 		}
 		//pneumatics
 		if(master.get_digital_new_press(DIGITAL_B))
