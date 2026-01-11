@@ -3,19 +3,19 @@
 
 
 pros::Controller master(pros::E_CONTROLLER_MASTER);
-pros::MotorGroup left_mg({-3, 2, -1});    	//pros::MotorGearset::blue
-pros::MotorGroup right_mg({10, -9, 8});  //pros::MotorGearset::blue
-pros::MotorGroup roller({20, -19});
+pros::MotorGroup left_mg({-1, 12, -2});    	//pros::MotorGearset::blue
+pros::MotorGroup right_mg({-20, 18, 9});  //pros::MotorGearset::blue
+pros::Motor stage1(-16);
+pros::Motor stage2(-13);
 
-pros::adi::Pneumatics tongue('E', false);
-pros::adi::Pneumatics centerupper('G', false);
-pros::adi::Pneumatics wing('C', true);
-pros::adi::Pneumatics pushdown('F', false);
-pros::adi::Pneumatics clamp('D', false);
-pros::adi::Pneumatics gate('H', true);
-pros::Rotation rotation_horizontal(-16);
-pros::Rotation rotation_vertical(-4);	
-pros::Imu imu(7); //change port number as needed
+pros::adi::Pneumatics tongue('H', false);
+pros::adi::Pneumatics centerupper('A', false);
+pros::adi::Pneumatics wing('G', true);
+pros::adi::Pneumatics pushdown('E', false);
+pros::adi::Pneumatics clamp('F', false);
+pros::Rotation rotation_horizontal(11);
+pros::Rotation rotation_vertical(-10);
+pros::Imu imu(21);
 lemlib::Drivetrain drivetrain(&left_mg, &right_mg, 11.5, lemlib::Omniwheel::NEW_4, 343, 2);
 lemlib::TrackingWheel horizontal(&rotation_horizontal, lemlib::Omniwheel::NEW_2, -2.5);
 lemlib::TrackingWheel vertical(&rotation_vertical, lemlib::Omniwheel::NEW_275, -1);
@@ -153,24 +153,28 @@ void opcontrol() {
 		//block collection
 		//intake
 		if (master.get_digital(DIGITAL_R1)){
-			roller.move(127);
+			stage1.move(127);
+			stage2.brake();
 		}
 		else if (master.get_digital(DIGITAL_R2)){
-			roller.move(-127);
+			stage1.move(-127);
+			stage2.brake();
 		}
 		//outtake
 		else if (master.get_digital(DIGITAL_L1)){
-			roller.move(127);
-			gate.retract();
+			stage1.move(127);
+			stage2.move(127);
+	
 		}
 		else if (master.get_digital(DIGITAL_L2)){
-			roller.move(60);
+			stage1.move(100);
+			stage2.move(127);
 			centerupper.extend();
 		}
 		else{
-			roller.move(0);
+			stage1.move(0);
+			stage2.move(0);
 			centerupper.retract();
-			gate.extend();
 		}
 		//pneumatics
 		if(master.get_digital_new_press(DIGITAL_B))
