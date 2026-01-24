@@ -17,8 +17,8 @@ pros::Rotation rotation_horizontal(11);
 pros::Rotation rotation_vertical(-10);
 pros::Imu imu(21);
 lemlib::Drivetrain drivetrain(&left_mg, &right_mg, 11.5, lemlib::Omniwheel::NEW_4, 343, 2);
-lemlib::TrackingWheel horizontal(&rotation_horizontal, lemlib::Omniwheel::NEW_2, -2.5);
-lemlib::TrackingWheel vertical(&rotation_vertical, lemlib::Omniwheel::NEW_275, -1);
+lemlib::TrackingWheel horizontal(&rotation_horizontal, lemlib::Omniwheel::NEW_2, 4);
+lemlib::TrackingWheel vertical(&rotation_vertical, lemlib::Omniwheel::NEW_275, 0.05);
 lemlib::OdomSensors sensors(&vertical, // vertical tracking wheel 1, set to null
                             nullptr, // vertical tracking wheel 2, set to nullptr as we are using IMEs
                             &horizontal, // horizontal tracking wheel 1
@@ -26,26 +26,26 @@ lemlib::OdomSensors sensors(&vertical, // vertical tracking wheel 1, set to null
                             &imu // inertial sensor
 );
 // lateral PID controller
-lemlib::ControllerSettings lateral_controller(7, // proportional gain (kP). //means going forward backward.. we dont use I, we use P and D 
+lemlib::ControllerSettings lateral_controller(7.3, // proportional gain (kP). //means going forward backward.. we dont use I, we use P and D 
                                               0, // integral gain (kI)
-                                              13, // derivative gain (kD)
-                                              0, // anti windup
-                                              0, // small error range, in inches
-                                              0, // small error range timeout, in milliseconds
-                                              0, // large error range, in inches
-                                              0, // large error range timeout, in milliseconds
-                                              0 // maximum acceleration (slew)
+                                              29, // derivative gain (kD)
+                                              3, // anti windup
+                                              1, // small error range, in inches
+                                              100, // small error range timeout, in milliseconds
+                                              3, // large error range, in inches
+                                              500, // large error range timeout, in milliseconds
+                                              20 // maximum acceleration (slew)
 );
 
 // angular PID controller
 lemlib::ControllerSettings angular_controller(3.9, // proportional gain (kP) //same thing  
                                               0, // integral gain (kI)
-                                              27.8, // derivative gain (kD)
-                                              0, // anti windup
-                                              0, // small error range, in degrees
-                                              0, // small error range timeout, in milliseconds
-                                              0, // large error range, in degrees
-                                              0, // large error range timeout, in milliseconds
+                                              33.5, // derivative gain (kD)
+                                              3, // anti windup
+                                              1, // small error range, in degrees
+                                              100, // small error range timeout, in milliseconds
+                                              3, // large error range, in degrees
+                                              500, // large error range timeout, in milliseconds
                                               0 // maximum acceleration (slew)
 );
 lemlib::Chassis chassis(
@@ -121,12 +121,121 @@ void competition_initialize() {}
  * will be stopped. Re-enabling the robot will restart the task, not re-start it
  * from where it left off.
  */
+void rightsideauto()
+{
+		    // set position to x:0, y:24, heading:0
+			//blueright
+    chassis.setPose(9.5, -49, 27.8); //starting position
+		stage1.move(100); // turn on intake (stage 1)
+		chassis.moveToPoint(24, -20, 6000, {.maxSpeed = 80}, true); // move to the 3 blue blocks
+		pros::delay(500);
+		chassis.waitUntilDone();
+		chassis.moveToPoint(51,-45, 10000, {.forwards = false}, true); // move between long goal and loader
+		chassis.waitUntilDone();
+		chassis.turnToHeading(180, 500);// turn to face loader
+		chassis.waitUntilDone();
+		tongue.extend(); // extend scraper 
+		pros::delay(250);
+		chassis.moveToPoint(51.2, -59.5, 840, {.maxSpeed = 127}, true); //extract blocks (first 3) from loader
+		chassis.waitUntilDone();
+		//move to long goal
+		chassis.moveToPose(52.7, -20, 180, 1700, { .forwards = false, .maxSpeed = 127, }, true);
+		//reverse to prevent clogged blocks
+		stage1.move(-20);
+		chassis.waitUntilDone();
+		//score blocks to long goal
+		stage1.move(127);
+		stage2.move(127);
+		pros::delay(1200);
+		chassis.moveToPose(46, -40, 180, 1800,{.forwards = true, .maxSpeed = 100}, true); 
+		//back away from long goal
+		stage1.move(0);
+		stage2.move(0);
+
+		chassis.waitUntilDone();
+		//arm down
+		wing.retract();
+		chassis.moveToPoint(51, -13, 1500, {.forwards = false, .maxSpeed = 127}, true);
+		//push blocks into goal
+		tongue.retract();
+		//lock robot
+}
+void leftsideauto()
+{
+	//set initial position
+	chassis.setPose(-16, -51,-90);
+	//move between long goal and loader
+	chassis.moveToPoint(-48,-48,1900,{.maxSpeed=120}, true);
+	chassis.waitUntilDone();
+	//turn to face loader
+		
+	chassis.turnToHeading(-180, 450);
+
+	chassis.waitUntilDone();
+	//extend tongue
+	tongue.extend();
+	stage1.move(100); // turn on intake (stage 1)
+	pros::delay(120);
+	//extract blocks from loader
+	chassis.moveToPoint(-47.3, -59.3, 1000, {.maxSpeed = 127}, true);
+	chassis.waitUntilDone();
+	//drive to long goal
+	chassis.moveToPoint(-49, -27.5, 870,{.forwards = false, .maxSpeed = 127}, true);
+	stage1.move(-20);
+	chassis.waitUntilDone();
+	//score the blocks
+	stage1.move(127);
+	stage2.move(127);
+	pros::delay(1200);
+	stage1.move(100);
+	stage2.move(0);
+	//move away from long goal
+	chassis.moveToPoint(-48, -46, 860,{.forwards = true, .maxSpeed = 127}, true);
+	chassis.waitUntilDone();
+	//turn to face blocks, retract tongue
+	tongue.retract();
+	chassis.turnToHeading(45, 780);
+	chassis.waitUntilDone();
+	//move to blocks
+	chassis.moveToPoint(-22, -18.6, 1300,{.maxSpeed = 70}, true);
+	chassis.waitUntilDone();
+	//chassis.moveToPoint(-19, -19, 1300,{.forwards = true, .maxSpeed = 70}, true);
+	chassis.turnToHeading(-137, 700,{.maxSpeed = 90});
+	chassis.waitUntilDone();
+
+	//go to mid goal and score
+	chassis.moveToPoint(-14.5, -11, 1250,{.forwards = false, .maxSpeed = 90}, true);
+	//shift down block pose.
+	stage1.move(-5);
+	stage2.move(-50);
+	chassis.waitUntilDone();
+	centerupper.extend(); 
+	//score mid goal
+	stage1.move(100);
+	stage2.move(127);
+
+	pros::delay(1500);
+	centerupper.retract();
+	
+	//move to long goal (for push) and stop rollers
+	stage1.move(0);
+	stage2.move(0);
+	chassis.moveToPoint(-39.4, -19.7,  1600,{.forwards = true, .maxSpeed = 100}, true);
+	chassis.waitUntilDone();
+	//turn inside goal, wing down
+	chassis.turnToHeading(0, 700);
+	
+	chassis.waitUntilDone(); 
+	wing.retract();
+
+	//push blocks into goal
+	chassis.moveToPoint(-40.5, -9.3, 600, {.forwards = true, .maxSpeed = 127}, true);
+	//turn and end code
+	chassis.turnToHeading(20, 500);
+}
 void autonomous() {
-	    // set position to x:0, y:0, heading:0
-    chassis.setPose(0, 0, 0);
-    // turn to face heading 90 with a very long timeout
-    chassis.turnToHeading(90, 100000);
-		//chassis.moveToPoint(0, 24, 10000);
+	leftsideauto();
+
 }
 
 /**
