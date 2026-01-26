@@ -3,19 +3,19 @@
 
 
 pros::Controller master(pros::E_CONTROLLER_MASTER);
-pros::MotorGroup left_mg({-1, 12, -2});    	//pros::MotorGearset::blue
-pros::MotorGroup right_mg({-20, 18, 9});  //pros::MotorGearset::blue
-pros::Motor stage1(-16);
-pros::Motor stage2(-13);
+pros::MotorGroup left_mg({-1, 12, -2});    	//pros::MotorGearset::blue, left motorgroup
+pros::MotorGroup right_mg({-20, 18, 9});  //pros::MotorGearset::blue, right motorgroup
+pros::Motor stage1(-16); // stage 1 of the intake
+pros::Motor stage2(-13); // stage 2 of the intake
 
-pros::adi::Pneumatics tongue('H', false);
+pros::adi::Pneumatics tongue('H', false); // tongue, also know as the scraper, gets blocks from the loader.
 pros::adi::Pneumatics centerupper('A', false);
-pros::adi::Pneumatics wing('G', true);
-pros::adi::Pneumatics pushdown('E', false);
-pros::adi::Pneumatics clamp('F', false);
-pros::Rotation rotation_horizontal(11);
-pros::Rotation rotation_vertical(-10);
-pros::Imu imu(21);
+pros::adi::Pneumatics wing('G', true); // wing de-score
+pros::adi::Pneumatics pushdown('E', false); // double park (later removed)
+pros::adi::Pneumatics clamp('F', false); //clamp for double park (later removed)
+pros::Rotation rotation_horizontal(11); // horizontal tracking wheeel
+pros::Rotation rotation_vertical(-10); // vertical tracking wheel
+pros::Imu imu(21); // IMU
 lemlib::Drivetrain drivetrain(&left_mg, &right_mg, 11.5, lemlib::Omniwheel::NEW_4, 343, 2);
 lemlib::TrackingWheel horizontal(&rotation_horizontal, lemlib::Omniwheel::NEW_2, 4);
 lemlib::TrackingWheel vertical(&rotation_vertical, lemlib::Omniwheel::NEW_275, 0.05);
