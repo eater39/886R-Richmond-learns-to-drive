@@ -1,7 +1,7 @@
 {
   "py/object": "pros.conductor.project.Project",
   "py/state": {
-    "project_name": "LEFTRUSH",
+    "project_name": "skills",
     "target": "v5",
     "templates": {
       "LemLib": {
@@ -635,8 +635,8 @@
       }
     },
     "upload_options": {
-      "icon": "ufo",
-      "slot": 2
+      "icon": "pros",
+      "slot": 4
     },
     "use_early_access": false
   }

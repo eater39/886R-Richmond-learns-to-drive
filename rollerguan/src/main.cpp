@@ -160,6 +160,10 @@ void rightsideauto()
 		tongue.retract();
 		//lock robot
 }
+/**
+ * @brief leftsideauto is a function that will autonomously score blocks into the goals on the left side of the field.
+ * It first sets the initial position of the robot, then moves between the long goal and the loader, turns to face the loader, extends the tongue, extracts blocks from the loader, drives to the long goal, scores the blocks, moves away from the long goal, turns to face the blocks, retracts the tongue, moves to the blocks, turns to face the mid goal, scores the mid goal, moves to the long goal, stops the rollers, turns inside the goal, wings down, pushes the blocks into the goal, and finally turns and ends the code.
+ */
 void leftsideauto()
 {
 	//set initial position
@@ -174,20 +178,19 @@ void leftsideauto()
 	chassis.waitUntilDone();
 	//extend tongue
 	tongue.extend();
-	stage1.move(100); // turn on intake (stage 1)
+	stage1.move(105); // turn on intake (stage 1)
 	pros::delay(120);
 	//extract blocks from loader
 	chassis.moveToPoint(-47.3, -59.3, 1000, {.maxSpeed = 127}, true);
 	chassis.waitUntilDone();
 	//drive to long goal
 	chassis.moveToPoint(-49, -27.5, 870,{.forwards = false, .maxSpeed = 127}, true);
-	stage1.move(-20);
 	chassis.waitUntilDone();
 	//score the blocks
 	stage1.move(127);
 	stage2.move(127);
 	pros::delay(1200);
-	stage1.move(100);
+	stage1.move(110);
 	stage2.move(0);
 	//move away from long goal
 	chassis.moveToPoint(-48, -46, 860,{.forwards = true, .maxSpeed = 127}, true);
@@ -197,14 +200,14 @@ void leftsideauto()
 	chassis.turnToHeading(45, 780);
 	chassis.waitUntilDone();
 	//move to blocks
-	chassis.moveToPoint(-22, -18.6, 1300,{.maxSpeed = 70}, true);
+	chassis.moveToPoint(-20, -19, 1400,{.maxSpeed = 70}, true);
 	chassis.waitUntilDone();
 	//chassis.moveToPoint(-19, -19, 1300,{.forwards = true, .maxSpeed = 70}, true);
 	chassis.turnToHeading(-137, 700,{.maxSpeed = 90});
 	chassis.waitUntilDone();
 
 	//go to mid goal and score
-	chassis.moveToPoint(-14.5, -11, 1250,{.forwards = false, .maxSpeed = 90}, true);
+	chassis.moveToPoint(-12, -11, 1250,{.forwards = false, .maxSpeed = 85}, true);
 	//shift down block pose.
 	stage1.move(-5);
 	stage2.move(-50);
@@ -212,29 +215,110 @@ void leftsideauto()
 	centerupper.extend(); 
 	//score mid goal
 	stage1.move(100);
-	stage2.move(127);
-
-	pros::delay(1500);
+	stage2.move(100);
+	pros::delay(1750);
 	centerupper.retract();
-	
+	pros::delay(50);
+	centerupper.extend();
+	pros::delay(50);
+	centerupper.retract();
 	//move to long goal (for push) and stop rollers
 	stage1.move(0);
 	stage2.move(0);
-	chassis.moveToPoint(-39.4, -19.7,  1600,{.forwards = true, .maxSpeed = 100}, true);
+	chassis.moveToPoint(-37.1, -30.5,  1700,{.forwards = true, .maxSpeed = 100}, true);
 	chassis.waitUntilDone();
 	//turn inside goal, wing down
-	chassis.turnToHeading(0, 700);
-	
+	chassis.turnToHeading(0, 800);
 	chassis.waitUntilDone(); 
 	wing.retract();
 
 	//push blocks into goal
-	chassis.moveToPoint(-40.5, -9.3, 600, {.forwards = true, .maxSpeed = 127}, true);
+	chassis.moveToPoint(-41, -9.3, 1000, {.forwards = true, .maxSpeed = 127}, true);
 	//turn and end code
-	chassis.turnToHeading(20, 500);
+	chassis.turnToHeading(12, 500);
+}
+
+void soloawp()
+{
+	chassis.setPose(4.5,-48, -90);
+	stage1.move(70); // turn on intake (stage 1)
+	//push other bot
+	chassis.moveToPoint(-3, -48, 900);
+	//go to right loader
+	chassis.moveToPoint(48.2, -48, 1500, {.forwards = false});
+	//turn to face loader, extend tongue
+	chassis.turnToHeading(-180, 600);
+	tongue.extend();
+	stage1.move(127);
+	pros::delay(100);
+	chassis.moveToPoint(49.5, -59.5, 800, {.maxSpeed = 127}, true); //extract blocks (first 3) from loader
+	chassis.waitUntilDone();
+	//move to long goal and score
+	chassis.moveToPoint(50, -27, 800, {.forwards = false, .maxSpeed = 127}, true);
+	chassis.waitUntilDone();
+	stage1.move(127);
+	stage2.move(127);
+	pros::delay(700);
+	//back away from long goal, reset values
+	stage1.move(110);
+	stage2.move(0);
+	tongue.retract();
+
+	chassis.moveToPoint(48, -45, 900,{.forwards = true, .maxSpeed = 127}, true); 
+
+	chassis.turnToHeading(-45, 900);
+
+	//move to blocks, fast
+
+	chassis.moveToPoint(20, -19, 1400,{.maxSpeed = 90}, true);
+
+	//turn to next batch of blocks
+	//chassis.turnToHeading(-90, 600,{.maxSpeed = 110});
+
+	chassis.moveToPoint(-18, -24, 1200,{ .maxSpeed = 127}, true);
+	chassis.waitUntilDone();
+	tongue.extend();
+	//turn to face mid goal
+	chassis.turnToHeading(-130, 650,{.maxSpeed = 127});
+	//go to mid goal and score (reset block pose before doing that)
+	chassis.moveToPoint(-2.6, -11.5, 900,{.forwards = false, .maxSpeed = 127}, true);
+	stage1.move(-5);
+	stage2.move(-50);
+	chassis.waitUntilDone();
+
+	centerupper.extend(); 
+	stage1.move(110);
+	stage2.move(100);
+	pros::delay(500);
+	centerupper.retract();
+	tongue.retract();
+	stage1.move(0);
+	stage2.move(0);
+
+	//move to left side
+	chassis.moveToPoint(-41, -48,  1600,{.forwards = true, .maxSpeed = 127}, true);
+
+	chassis.turnToHeading(-180, 600);
+	chassis.waitUntilDone();
+	chassis.setPose(-41,-48, -180);
+	//turn to face loader
+
+	tongue.extend();
+	//get blocks from loader
+	stage1.move(110);
+
+	//score long goal
+	chassis.moveToPoint(-42.2, -28.2, 600, {.forwards = false, .maxSpeed = 127}, true);
+	chassis.waitUntilDone();
+	stage1.move(127);
+	stage2.move(127);	
+
+	
+	
+
 }
 void autonomous() {
-	leftsideauto();
+	soloawp();
 
 }
 
@@ -276,8 +360,8 @@ void opcontrol() {
 	
 		}
 		else if (master.get_digital(DIGITAL_L2)){
-			stage1.move(100);
-			stage2.move(127);
+			stage1.move(75);
+			stage2.move(70);
 			centerupper.extend();
 		}
 		else{
