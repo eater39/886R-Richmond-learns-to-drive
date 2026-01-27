@@ -13,6 +13,7 @@ pros::adi::Pneumatics centerupper('A', false);
 pros::adi::Pneumatics wing('G', true); // wing de-score
 pros::adi::Pneumatics pushdown('E', false); // double park (later removed)
 pros::adi::Pneumatics clamp('F', false); //clamp for double park (later removed)
+peos::adi::Pneumatics centerupperdescore('B', false)
 pros::Rotation rotation_horizontal(11); // horizontal tracking wheeel
 pros::Rotation rotation_vertical(-10); // vertical tracking wheel
 pros::Imu imu(21); // IMU
@@ -287,8 +288,8 @@ void soloawp()
 	chassis.waitUntilDone();
 
 	centerupper.extend(); 
-	stage1.move(110);
-	stage2.move(100);
+	stage1.move(127);
+	stage2.move(127);
 	pros::delay(500);
 	centerupper.retract();
 	tongue.retract();
@@ -386,6 +387,10 @@ void opcontrol() {
 		if (master.get_digital_new_press(DIGITAL_DOWN)){
 			pushdown.toggle();
 		}
+		if (master.get_digital_new_press(DIGITAL_RIGHT)){
+			centerupperdescore.toggle();
+		}
+		
 			
 		pros::delay(20);                              
 	}
