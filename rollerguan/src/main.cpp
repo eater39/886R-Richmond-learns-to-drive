@@ -11,9 +11,9 @@ pros::Motor stage2(-13); // stage 2 of the intake
 pros::adi::Pneumatics tongue('H', false); // tongue, also know as the scraper, gets blocks from the loader.
 pros::adi::Pneumatics centerupper('A', false);
 pros::adi::Pneumatics wing('G', true); // wing de-score
-pros::adi::Pneumatics pushdown('E', false); // double park (later removed)
-pros::adi::Pneumatics clamp('F', false); //clamp for double park (later removed)
-peos::adi::Pneumatics centerupperdescore('B', false)
+
+
+pros::adi::Pneumatics centerupperdescore('F', false);
 pros::Rotation rotation_horizontal(11); // horizontal tracking wheeel
 pros::Rotation rotation_vertical(-10); // vertical tracking wheel
 pros::Imu imu(21); // IMU
@@ -255,61 +255,62 @@ void soloawp()
 	chassis.moveToPoint(49.5, -59.5, 800, {.maxSpeed = 127}, true); //extract blocks (first 3) from loader
 	chassis.waitUntilDone();
 	//move to long goal and score
-	chassis.moveToPoint(50, -27, 800, {.forwards = false, .maxSpeed = 127}, true);
+	chassis.moveToPoint(49, -27, 800, {.forwards = false, .maxSpeed = 127}, true);
 	chassis.waitUntilDone();
 	stage1.move(127);
 	stage2.move(127);
 	pros::delay(700);
 	//back away from long goal, reset values
-	stage1.move(110);
-	stage2.move(0);
+	stage1.move(127);
+	stage2.move(-10);
 	tongue.retract();
 
-	chassis.moveToPoint(48, -45, 900,{.forwards = true, .maxSpeed = 127}, true); 
+	chassis.moveToPoint(48, -42, 1000,{.forwards = true, .maxSpeed = 127, .minSpeed = 20}, true); 
 
-	chassis.turnToHeading(-45, 900);
+	chassis.turnToHeading(-45, 1200);
 
 	//move to blocks, fast
 
-	chassis.moveToPoint(20, -19, 1400,{.maxSpeed = 90}, true);
+	chassis.moveToPoint(21, -18.6, 2000,{.maxSpeed = 127, .minSpeed = 35}, true);
 
 	//turn to next batch of blocks
 	//chassis.turnToHeading(-90, 600,{.maxSpeed = 110});
 
-	chassis.moveToPoint(-18, -24, 1200,{ .maxSpeed = 127}, true);
+	chassis.moveToPoint(-18, -19.3, 1500,{ .maxSpeed = 127}, true);
 	chassis.waitUntilDone();
 	tongue.extend();
 	//turn to face mid goal
 	chassis.turnToHeading(-130, 650,{.maxSpeed = 127});
 	//go to mid goal and score (reset block pose before doing that)
-	chassis.moveToPoint(-2.6, -11.5, 900,{.forwards = false, .maxSpeed = 127}, true);
+	chassis.moveToPoint(-11.5, -12.2, 1020,{.forwards = false, .maxSpeed = 127, .minSpeed = 127}, true);
 	stage1.move(-5);
 	stage2.move(-50);
-	chassis.waitUntilDone();
-
+	chassis.waitUntilDone(); 
 	centerupper.extend(); 
 	stage1.move(127);
-	stage2.move(127);
-	pros::delay(500);
+	stage2.move(100);
+	pros::delay(680);
 	centerupper.retract();
 	tongue.retract();
 	stage1.move(0);
 	stage2.move(0);
 
 	//move to left side
-	chassis.moveToPoint(-41, -48,  1600,{.forwards = true, .maxSpeed = 127}, true);
+	chassis.moveToPoint(-38.3, -43.8,  1300,{.forwards = true, .maxSpeed = 90, .minSpeed = 50}, true);
 
-	chassis.turnToHeading(-180, 600);
+	chassis.turnToHeading(-180, 400);
+	tongue.extend();
 	chassis.waitUntilDone();
-	chassis.setPose(-41,-48, -180);
-	//turn to face loader
 
+	//turn to face loader
+	
+	chassis.moveToPoint(-41.5, -62,  880,{.forwards = true, .maxSpeed = 127, .minSpeed = 90}, true);
 	tongue.extend();
 	//get blocks from loader
-	stage1.move(110);
-
-	//score long goal
-	chassis.moveToPoint(-42.2, -28.2, 600, {.forwards = false, .maxSpeed = 127}, true);
+	stage1.move(127);
+	chassis.waitUntilDone();
+		//score long goal
+	chassis.moveToPoint(-41.4, -33, 700, {.forwards = false, .maxSpeed = 127, .minSpeed = 110}, true);
 	chassis.waitUntilDone();
 	stage1.move(127);
 	stage2.move(127);	
@@ -361,10 +362,15 @@ void opcontrol() {
 	
 		}
 		else if (master.get_digital(DIGITAL_L2)){
-			stage1.move(75);
-			stage2.move(70);
+			stage1.move(127); //75
+			stage2.move(127);//70
 			centerupper.extend();
 		}
+		else if (master.get_digital(DIGITAL_DOWN)){
+			stage1.move(-25);
+			stage2.move(-60);
+		}
+	
 		else{
 			stage1.move(0);
 			stage2.move(0);
@@ -380,12 +386,6 @@ void opcontrol() {
 		}
 		else{
 			wing.extend();
-		}
-		if(master.get_digital_new_press(DIGITAL_RIGHT)){
-			clamp.toggle();
-		}
-		if (master.get_digital_new_press(DIGITAL_DOWN)){
-			pushdown.toggle();
 		}
 		if (master.get_digital_new_press(DIGITAL_RIGHT)){
 			centerupperdescore.toggle();
