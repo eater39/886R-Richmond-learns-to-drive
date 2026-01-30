@@ -407,9 +407,6 @@ void opcontrol() {
 		else if (master.get_digital(DIGITAL_L2)){
 			stage1.move(127); //75
 			stage2.move(127);//70
-<<<<<<< HEAD
-			centerupper.extend(); //extends the blocker for middle goal scoring
-=======
 			centerupper.extend();
 >>>>>>> origin/main
 		}

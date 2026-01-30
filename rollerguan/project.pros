@@ -1,11 +1,7 @@
 {
   "py/object": "pros.conductor.project.Project",
   "py/state": {
-<<<<<<< HEAD
     "project_name": "SkillsAUTO",
-=======
-    "project_name": "SAWP",
->>>>>>> origin/main
     "target": "v5",
     "templates": {
       "LemLib": {
@@ -639,14 +635,9 @@
       }
     },
     "upload_options": {
-<<<<<<< HEAD
       "icon": "alien",
       "slot": 5,
       "description": "Skills auto so skibidi sigma"
-=======
-      "icon": "pizza",
-      "slot": 3
->>>>>>> origin/main
     },
     "use_early_access": false
   }
