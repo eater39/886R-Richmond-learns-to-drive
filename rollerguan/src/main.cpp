@@ -408,7 +408,7 @@ void opcontrol() {
 			stage1.move(127); //75
 			stage2.move(127);//70
 			centerupper.extend();
->>>>>>> origin/main
+
 		}
 		else if (master.get_digital(DIGITAL_DOWN)){
 			stage1.move(-25);
@@ -429,11 +429,7 @@ void opcontrol() {
 			wing.retract(); // retracts wing de-score
 		}
 		else{
-<<<<<<< HEAD
 			wing.extend(); // extends wing de-score
-=======
-			wing.extend();
->>>>>>> origin/main
 		}
 		if (master.get_digital_new_press(DIGITAL_RIGHT)){
 			centerupperdescore.toggle(); // toggles mid-goal descore mechanism
