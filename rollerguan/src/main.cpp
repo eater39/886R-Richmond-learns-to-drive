@@ -319,9 +319,52 @@ void soloawp()
 	
 
 }
-void autonomous() {
-	soloawp();
 
+void skillsAuto()
+{
+	//starting position
+	chassis.setPose(0,-48,0);
+	chassis.moveToPoint(0, -43, 500, {.maxSpeed = 100}, true); // move forward a bit. 
+	chassis.waitUntilDone();
+	chassis.turnToHeading(-55, 600); //turn to face first red block
+	chassis.waitUntilDone();
+	stage1.move(70);
+	chassis.moveToPoint(-26, -20.5, 1200, {.maxSpeed = 100}, true);//intake red block
+	chassis.turnToHeading(-140,600);
+	chassis.moveToPoint(-10, -9.5, 1250,{.forwards = false, .maxSpeed = 85}, true); //score mid goal
+	stage1.move(-5);
+	stage2.move(-50);
+	chassis.waitUntilDone(); 
+	centerupper.extend(); 
+	stage1.move(127);
+	stage2.move(100);
+	pros::delay(800);
+	stage1.move(0);
+	stage2.move(0);
+	chassis.moveToPoint(-43, -43.8,  1300,{.forwards = true, .maxSpeed = 90, .minSpeed = 50}, true);
+	tongue.extend();
+	chassis.turnToHeading(-180, 400);
+	chassis.waitUntilDone();
+	//get loader
+
+	stage1.move(127);
+	chassis.moveToPoint(-43, -58,  1000,{.forwards = true, .maxSpeed = 127, .minSpeed = 90}, true);
+	chassis.waitUntilDone();
+	pros::delay(1000);
+	stage1.move(0);
+	//back away from loader
+	chassis.moveToPoint(-43, -40,  1000,{.forwards = false, .maxSpeed = 127}, true);
+	//turn towards wall
+	chassis.turnToHeading(-270, 600);
+
+
+
+
+	
+}
+
+void autonomous() {
+	skillsAuto();
 }
 
 /**
@@ -349,22 +392,22 @@ void opcontrol() {
 		//intake
 		if (master.get_digital(DIGITAL_R1)){
 			stage1.move(127);
-			stage2.brake();
+			stage2.brake(); //prevents stage 2 from moving and "spitting" blocks out
 		}
 		else if (master.get_digital(DIGITAL_R2)){
-			stage1.move(-127);
-			stage2.brake();
+			stage1.move(-127); //reverse stage 1;pushes blocks into low goal/unjam
+			stage2.brake(); //prevents stage 2 from moving and "spitting" blocks out
 		}
 		//outtake
 		else if (master.get_digital(DIGITAL_L1)){
-			stage1.move(127);
+			stage1.move(127); //Moves both motors to outtake blocks
 			stage2.move(127);
 	
 		}
 		else if (master.get_digital(DIGITAL_L2)){
 			stage1.move(127); //75
 			stage2.move(127);//70
-			centerupper.extend();
+			centerupper.extend(); //extends the blocker for middle goal scoring
 		}
 		else if (master.get_digital(DIGITAL_DOWN)){
 			stage1.move(-25);
@@ -374,21 +417,21 @@ void opcontrol() {
 		else{
 			stage1.move(0);
 			stage2.move(0);
-			centerupper.retract();
+			centerupper.retract(); // retracts the blocker for long goal scoring
 		}
 		//pneumatics
 		if(master.get_digital_new_press(DIGITAL_B))
 		{
-			tongue.toggle();
+			tongue.toggle(); // toggles the scraper to collect blocks from the loader
 		}
 		if(master.get_digital(DIGITAL_Y)){
-			wing.retract();
+			wing.retract(); // retracts wing de-score
 		}
 		else{
-			wing.extend();
+			wing.extend(); // extends wing de-score
 		}
 		if (master.get_digital_new_press(DIGITAL_RIGHT)){
-			centerupperdescore.toggle();
+			centerupperdescore.toggle(); // toggles mid-goal descore mechanism
 		}
 		
 			
