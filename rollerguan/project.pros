@@ -1,7 +1,7 @@
 {
   "py/object": "pros.conductor.project.Project",
   "py/state": {
-    "project_name": "SkillsAUTO",
+    "project_name": "Left",
     "target": "v5",
     "templates": {
       "LemLib": {
@@ -635,9 +635,9 @@
       }
     },
     "upload_options": {
-      "icon": "alien",
-      "slot": 5,
-      "description": "Skills auto so skibidi sigma"
+      "icon": "X",
+      "slot": 2,
+      "description": "deez nuts"
     },
     "use_early_access": false
   }

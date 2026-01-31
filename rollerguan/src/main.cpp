@@ -182,7 +182,7 @@ void leftsideauto()
 	stage1.move(105); // turn on intake (stage 1)
 	pros::delay(120);
 	//extract blocks from loader
-	chassis.moveToPoint(-47.3, -59.3, 1000, {.maxSpeed = 127}, true);
+	chassis.moveToPoint(-47.3, -60.5, 1000, {.maxSpeed = 127}, true);
 	chassis.waitUntilDone();
 	//drive to long goal
 	chassis.moveToPoint(-49, -27.5, 870,{.forwards = false, .maxSpeed = 127}, true);
@@ -208,7 +208,7 @@ void leftsideauto()
 	chassis.waitUntilDone();
 
 	//go to mid goal and score
-	chassis.moveToPoint(-12, -11, 1250,{.forwards = false, .maxSpeed = 85}, true);
+	chassis.moveToPoint(-10.5, -10.5, 1250,{.forwards = false, .maxSpeed = 85}, true);
 	//shift down block pose.
 	stage1.move(-5);
 	stage2.move(-50);
@@ -226,7 +226,7 @@ void leftsideauto()
 	//move to long goal (for push) and stop rollers
 	stage1.move(0);
 	stage2.move(0);
-	chassis.moveToPoint(-37.1, -30.5,  1700,{.forwards = true, .maxSpeed = 100}, true);
+	chassis.moveToPoint(-36.9, -30.5,  1700,{.forwards = true, .maxSpeed = 100}, true);
 	chassis.waitUntilDone();
 	//turn inside goal, wing down
 	chassis.turnToHeading(0, 800);
@@ -241,6 +241,7 @@ void leftsideauto()
 
 void soloawp()
 {
+	wing.retract(); // wing down at start
 	chassis.setPose(4.5,-48, -90);
 	stage1.move(70); // turn on intake (stage 1)
 	//push other bot
@@ -310,7 +311,7 @@ void soloawp()
 	stage1.move(127);
 	chassis.waitUntilDone();
 		//score long goal
-	chassis.moveToPoint(-41.4, -33, 700, {.forwards = false, .maxSpeed = 127, .minSpeed = 110}, true);
+	chassis.moveToPoint(-41.7, -33, 700, {.forwards = false, .maxSpeed = 127, .minSpeed = 110}, true);
 	chassis.waitUntilDone();
 	stage1.move(127);
 	stage2.move(127);	
@@ -364,7 +365,7 @@ void skillsAuto()
 }
 
 void autonomous() {
-	skillsAuto();
+	leftsideauto();
 }
 
 /**
