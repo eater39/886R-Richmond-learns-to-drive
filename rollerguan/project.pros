@@ -1,7 +1,7 @@
 {
   "py/object": "pros.conductor.project.Project",
   "py/state": {
-    "project_name": "Left",
+    "project_name": "SkillsAUTO",
     "target": "v5",
     "templates": {
       "LemLib": {
@@ -635,9 +635,10 @@
       }
     },
     "upload_options": {
-      "icon": "X",
-      "slot": 2,
-      "description": "deez nuts"
+      "icon": "planet",
+      "slot": 5,
+      "description": "skibidi",
+      "after": "screen"
     },
     "use_early_access": false
   }

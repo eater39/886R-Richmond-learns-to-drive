@@ -329,43 +329,104 @@ void skillsAuto()
 	chassis.waitUntilDone();
 	chassis.turnToHeading(-55, 600); //turn to face first red block
 	chassis.waitUntilDone();
-	stage1.move(70);
-	chassis.moveToPoint(-26, -20.5, 1200, {.maxSpeed = 100}, true);//intake red block
+	stage1.move(75);
+	chassis.moveToPoint(-26, -20.5, 1200, {.maxSpeed = 90}, true);//intake red block
 	chassis.turnToHeading(-140,600);
-	chassis.moveToPoint(-10, -9.5, 1250,{.forwards = false, .maxSpeed = 85}, true); //score mid goal
+	chassis.moveToPoint(-10, -9.5, 1250,{.forwards = false, .maxSpeed = 85}, true); 
+	//score mid goal
 	stage1.move(-5);
 	stage2.move(-50);
 	chassis.waitUntilDone(); 
 	centerupper.extend(); 
 	stage1.move(127);
 	stage2.move(100);
-	pros::delay(800);
+	pros::delay(1200);
 	stage1.move(0);
 	stage2.move(0);
-	chassis.moveToPoint(-43, -43.8,  1300,{.forwards = true, .maxSpeed = 90, .minSpeed = 50}, true);
+	centerupper.retract();
+	chassis.moveToPoint(-43, -43.8,  1300,{.forwards = true, .maxSpeed = 90, .minSpeed = 50}, true); //move to left loader
 	tongue.extend();
-	chassis.turnToHeading(-180, 400);
+	chassis.waitUntilDone();
+	chassis.turnToHeading(180, 500);
 	chassis.waitUntilDone();
 	//get loader
-
 	stage1.move(127);
-	chassis.moveToPoint(-43, -58,  1000,{.forwards = true, .maxSpeed = 127, .minSpeed = 90}, true);
+	chassis.moveToPoint(-41, -58,  1000,{.forwards = true, .maxSpeed = 127, .minSpeed = 90}, true);
 	chassis.waitUntilDone();
-	pros::delay(1000);
+	pros::delay(1500);
 	stage1.move(0);
-	//back away from loader
+	//back away from loader 	
 	chassis.moveToPoint(-43, -40,  1000,{.forwards = false, .maxSpeed = 127}, true);
-	//turn towards wall
-	chassis.turnToHeading(-270, 600);
+	//turn towards wall;
+	tongue.retract();
+	chassis.swingToHeading(15,  DriveSide::RIGHT, 2000, {.direction = AngularDirection::CW_CLOCKWISE}); //turn to face front
+	chassis.moveToPoint(-46.5, 56, 5000,{.forwards = true, .maxSpeed = 127, .minSpeed = 50}, true); //move to front wall
 
+	chassis.turnToHeading(-50, 800); //turn to face long goal
+	chassis.moveToPoint(-37.7, 51,  2000,{.forwards = false, .maxSpeed = 127}, true); //move to long goal
+	chassis.turnToHeading(0, 800);
+	//drive to long goal
+	chassis.moveToPoint(-38.75, 34, 800,{.forwards = false, .maxSpeed = 100}, true); 
+	chassis.waitUntilDone();
+	//score long goal
+	stage1.move(127);
+	stage2.move(127);
+	pros::delay(1500);
+	stage1.move(100);
+	stage2.move(0);
 
+	//get loader
 
-
+	tongue.extend();
+	chassis.moveToPoint(-38.2, 73,  3000,{.forwards = true, .maxSpeed = 127, .minSpeed = 70}, true);
+	chassis.waitUntilDone();
+	pros::delay(1500);
 	
+	chassis.moveToPoint(-40.1, 41,  800,{.forwards = false, .maxSpeed = 100}, true);
+	stage1.move(-20);
+	chassis.waitUntilDone();
+	stage1.move(127);
+	stage2.move(127);
+	pros::delay(1500);
+	stage1.move(110);
+	stage2.move(0);
+
+	//chassis.moveToPoint(-35.9, 20,  300,{.forwards = false, .maxSpeed = 40}, true);
+	//reset position
+	chassis.setPose(-48, 27.5, 0);
+	tongue.retract();
+	chassis.swingToHeading(90, DriveSide::LEFT, 1500, {.direction = AngularDirection::CW_CLOCKWISE});
+	chassis.waitUntilDone();
+	//drive to blocks
+	chassis.moveToPoint(22, 24,5000,{.forwards = true, .maxSpeed = 127, .minSpeed = 100}, true);
+	chassis.waitUntilDone();
+	chassis.moveToPoint(3,9.5,1200,{.forwards = false, .maxSpeed = 90}, true); //move to mid goal
+	chassis.waitUntilDone();
+	//score mid goal
+	stage1.move(-5);
+	stage2.move(-50);
+	chassis.waitUntilDone(); 
+	centerupper.extend(); 
+	stage1.move(127);
+	stage2.move(100);
+	pros::delay(1500);
+	stage1.move(0);
+	stage2.move(0);
+	centerupper.retract();
+
+	// //go to park
+
+	// chassis.moveToPoint(-28, 59, 2000,{.forwards = true, .maxSpeed = 127}, true);
+
+	// chassis.swingToHeading(90, DriveSide::RIGHT, 1500, {.direction = AngularDirection::CW_CLOCKWISE});
+
+	// chassis.moveToPoint(19, 60.5, 5000,{.forwards = true, .maxSpeed = 127, .minSpeed = 120}, true);
+	// chassis.moveToPoint(0, 60.5, 1500,{.forwards = false, .maxSpeed = 127}, true);
+
 }
 
 void autonomous() {
-	leftsideauto();
+	skillsAuto();
 }
 
 /**
