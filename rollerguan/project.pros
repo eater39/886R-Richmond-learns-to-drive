@@ -1,7 +1,7 @@
 {
   "py/object": "pros.conductor.project.Project",
   "py/state": {
-    "project_name": "SkillsAUTO",
+    "project_name": "Skills",
     "target": "v5",
     "templates": {
       "LemLib": {
@@ -635,7 +635,7 @@
       }
     },
     "upload_options": {
-      "icon": "planet",
+      "icon": "X",
       "slot": 5,
       "description": "skibidi",
       "after": "screen"
