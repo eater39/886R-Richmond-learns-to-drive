@@ -10,11 +10,9 @@ pros::Motor stage2(-13); // stage 2 of the intake
 
 pros::adi::Pneumatics tongue('H', false); // tongue, also know as the scraper, gets blocks from the loader.
 pros::adi::Pneumatics centerupper('A', false);
-pros::adi::Pneumatics wing('G', true); // wing de-score
-
-
+pros::adi::Pneumatics wing('G', false); // wing de-score,false
 pros::adi::Pneumatics centerupperdescore('F', false);
-pros::Rotation rotation_horizontal(11); // horizontal tracking wheeel
+pros::Rotation rotation_horizontal(14); // horizontal tracking wheeel
 pros::Rotation rotation_vertical(-10); // vertical tracking wheel
 pros::Imu imu(21); // IMU
 lemlib::Drivetrain drivetrain(&left_mg, &right_mg, 11.5, lemlib::Omniwheel::NEW_4, 343, 2);
@@ -128,19 +126,19 @@ void rightsideauto()
 			//blueright
     chassis.setPose(9.5, -49, 27.8); //starting position
 		stage1.move(100); // turn on intake (stage 1)
-		chassis.moveToPoint(24, -20, 6000, {.maxSpeed = 80}, true); // move to the 3 blue blocks
-		pros::delay(500);
+		chassis.moveToPoint(24.5, -20, 6000, {.maxSpeed = 80}, true); // move to the 3 blue blocks
+		pros::delay(700);
 		chassis.waitUntilDone();
-		chassis.moveToPoint(51,-45, 10000, {.forwards = false}, true); // move between long goal and loader
+		chassis.moveToPoint(52,-45, 10000, {.forwards = false}, true); // move between long goal and loader
 		chassis.waitUntilDone();
 		chassis.turnToHeading(180, 500);// turn to face loader
 		chassis.waitUntilDone();
 		tongue.extend(); // extend scraper 
 		pros::delay(250);
-		chassis.moveToPoint(51.2, -59.5, 840, {.maxSpeed = 127}, true); //extract blocks (first 3) from loader
+		chassis.moveToPoint(52, -60.3, 900, {.maxSpeed = 127}, true); //extract blocks (first 3) from loader
 		chassis.waitUntilDone();
 		//move to long goal
-		chassis.moveToPose(52.7, -20, 180, 1700, { .forwards = false, .maxSpeed = 127, }, true);
+		chassis.moveToPose(53.7, -19.5, 180, 1700, { .forwards = false, .maxSpeed = 127, }, true);
 		//reverse to prevent clogged blocks
 		stage1.move(-20);
 		chassis.waitUntilDone();
@@ -148,7 +146,7 @@ void rightsideauto()
 		stage1.move(127);
 		stage2.move(127);
 		pros::delay(1200);
-		chassis.moveToPose(46, -40, 180, 1800,{.forwards = true, .maxSpeed = 100}, true); 
+		chassis.moveToPose(48, -40, 180, 1800,{.forwards = true, .maxSpeed = 100}, true); 
 		//back away from long goal
 		stage1.move(0);
 		stage2.move(0);
@@ -156,7 +154,7 @@ void rightsideauto()
 		chassis.waitUntilDone();
 		//arm down
 		wing.retract();
-		chassis.moveToPoint(51, -13, 1500, {.forwards = false, .maxSpeed = 127}, true);
+		chassis.moveToPoint(50.7, -11, 1500, {.forwards = false, .maxSpeed = 127}, true);
 		//push blocks into goal
 		tongue.retract();
 		//lock robot
@@ -182,10 +180,10 @@ void leftsideauto()
 	stage1.move(105); // turn on intake (stage 1)
 	pros::delay(120);
 	//extract blocks from loader
-	chassis.moveToPoint(-47.3, -60.5, 1000, {.maxSpeed = 127}, true);
+	chassis.moveToPoint(-47.3, -60.5, 1000, {.maxSpeed = 80}, true);
 	chassis.waitUntilDone();
 	//drive to long goal
-	chassis.moveToPoint(-49, -27.5, 870,{.forwards = false, .maxSpeed = 127}, true);
+	chassis.moveToPoint(-48, -27.5, 870,{.forwards = false, .maxSpeed = 100}, true);
 	chassis.waitUntilDone();
 	//score the blocks
 	stage1.move(127);
@@ -201,14 +199,14 @@ void leftsideauto()
 	chassis.turnToHeading(45, 780);
 	chassis.waitUntilDone();
 	//move to blocks
-	chassis.moveToPoint(-20, -19, 1400,{.maxSpeed = 70}, true);
+	chassis.moveToPoint(-18, -18, 1500,{.maxSpeed = 75}, true);
 	chassis.waitUntilDone();
 	//chassis.moveToPoint(-19, -19, 1300,{.forwards = true, .maxSpeed = 70}, true);
 	chassis.turnToHeading(-137, 700,{.maxSpeed = 90});
 	chassis.waitUntilDone();
 
 	//go to mid goal and score
-	chassis.moveToPoint(-10.5, -10.5, 1250,{.forwards = false, .maxSpeed = 85}, true);
+	chassis.moveToPoint(-13, -10, 1250,{.forwards = false, .maxSpeed = 90}, true);
 	//shift down block pose.
 	stage1.move(-5);
 	stage2.move(-50);
@@ -226,7 +224,7 @@ void leftsideauto()
 	//move to long goal (for push) and stop rollers
 	stage1.move(0);
 	stage2.move(0);
-	chassis.moveToPoint(-36.9, -30.5,  1700,{.forwards = true, .maxSpeed = 100}, true);
+	chassis.moveToPoint(-36.8, -30.5,  1700,{.forwards = true, .maxSpeed = 100}, true);
 	chassis.waitUntilDone();
 	//turn inside goal, wing down
 	chassis.turnToHeading(0, 800);
@@ -234,7 +232,7 @@ void leftsideauto()
 	wing.retract();
 
 	//push blocks into goal
-	chassis.moveToPoint(-41, -9.3, 1000, {.forwards = true, .maxSpeed = 127}, true);
+	chassis.moveToPoint(-41, -10, 1000, {.forwards = true, .maxSpeed = 127}, true);
 	//turn and end code
 	chassis.turnToHeading(12, 500);
 }
@@ -253,10 +251,10 @@ void soloawp()
 	tongue.extend();
 	stage1.move(127);
 	pros::delay(100);
-	chassis.moveToPoint(49.5, -59.5, 800, {.maxSpeed = 127}, true); //extract blocks (first 3) from loader
+	chassis.moveToPoint(49.5, -56.5, 800, {.maxSpeed = 127}, true); //extract blocks (first 3) from loader
 	chassis.waitUntilDone();
 	//move to long goal and score
-	chassis.moveToPoint(49, -27, 800, {.forwards = false, .maxSpeed = 127}, true);
+	chassis.moveToPoint(50, -27, 800, {.forwards = false, .maxSpeed = 127}, true);
 	chassis.waitUntilDone();
 	stage1.move(127);
 	stage2.move(127);
@@ -316,6 +314,7 @@ void soloawp()
 	stage1.move(127);
 	stage2.move(127);	
 
+
 	
 	
 
@@ -324,15 +323,21 @@ void soloawp()
 void skillsAuto()
 {
 	//starting position
+	//V1 CODE
+		//starting position
 	chassis.setPose(0,-48,0);
+	wing.extend(); // wing up at start
 	chassis.moveToPoint(0, -43, 500, {.maxSpeed = 100}, true); // move forward a bit. 
-	chassis.waitUntilDone();
 	chassis.turnToHeading(-55, 600); //turn to face first red block
 	chassis.waitUntilDone();
-	stage1.move(75);
-	chassis.moveToPoint(-27, -21.5, 1200, {.maxSpeed = 90}, true);//intake red block
-	chassis.turnToHeading(-140,600);
-	chassis.moveToPoint(-10, -9.5, 1250,{.forwards = false, .maxSpeed = 85}, true); 
+	stage1.move(90);
+	chassis.moveToPoint(-25, -22.5, 1200, {.maxSpeed = 85}, true);//intake red block
+	chassis.waitUntilDone();
+	chassis.turnToHeading(-130,800);
+	chassis.waitUntilDone();
+	//MID GOAL 1
+	chassis.moveToPoint(-8, -9.7, 1400,{.forwards = false, .maxSpeed = 80}, true); 
+	//chassis.turnToHeading(-140, 400,{.maxSpeed = 127});
 	//score mid goal
 	stage1.move(-5);
 	stage2.move(-50);
@@ -340,34 +345,43 @@ void skillsAuto()
 	centerupper.extend(); 
 	stage1.move(100);
 	stage2.move(100);
-	pros::delay(1400);
+	pros::delay(1500);
 	stage1.move(0);
 	stage2.move(0);
 	centerupper.retract();
-	chassis.moveToPoint(-44, -43.8,  1300,{.forwards = true, .maxSpeed = 90, .minSpeed = 50}, true); //move to left loader
+	chassis.moveToPoint(-43.7, -43.8,  1300,{.forwards = true, .maxSpeed = 90, .minSpeed = 50}, true); 
+	
+	
+	
+	
+	
+	//move to left loader
 	tongue.extend();
 	chassis.waitUntilDone();
 	chassis.turnToHeading(180, 500);
 	chassis.waitUntilDone();
-	//get loader
+	//get loader 1
 	stage1.move(127);
-	chassis.moveToPoint(-43.9, -57.8,  4000,{.forwards = true, .maxSpeed = 127, .minSpeed = 70}, true);
+	chassis.moveToPoint(-43.7, -60,  4000,{.forwards = true, .maxSpeed = 80}, true);
 	chassis.waitUntilDone();
 	pros::delay(1500);
 	stage1.move(80);
 	//back away from loader 	
-	chassis.moveToPoint(-43, -40,  1000,{.forwards = false, .maxSpeed = 127}, true);
+	chassis.moveToPoint(-44, -40,  3000,{.forwards = false, .maxSpeed = 90}, true);
+	chassis.waitUntilDone();
 	//turn towards wall;
 	tongue.retract();
-	chassis.swingToHeading(15,  DriveSide::RIGHT, 2000, {.direction = AngularDirection::CW_CLOCKWISE}); //turn to face front
+	chassis.swingToHeading(0,  DriveSide::RIGHT, 2000, {.direction = AngularDirection::CW_CLOCKWISE, .maxSpeed = 90}); //turn to face front
+	chassis.waitUntilDone();
+	//Drive to top left
 	chassis.moveToPoint(-46.5, 56, 5000,{.forwards = true, .maxSpeed = 127, .minSpeed = 50}, true); //move to front wall
 
+	//chassis.turnToHeading(-50, 800); //turn to face long goal //move to front wall
 	chassis.turnToHeading(-50, 800); //turn to face long goal
 	chassis.moveToPoint(-37.7, 51,  2000,{.forwards = false, .maxSpeed = 127}, true); //move to long goal
 	chassis.turnToHeading(0, 800);
+	chassis.moveToPoint(-38.2, 35, 800,{.forwards = false, .maxSpeed = 80}, true); 
 	//drive to long goal
-	chassis.moveToPoint(-38.5, 34.5, 800,{.forwards = false, .maxSpeed = 100}, true); 
-	chassis.waitUntilDone();
 	//score long goal
 	stage1.move(-50);
 	tongue.extend();
@@ -381,11 +395,11 @@ void skillsAuto()
 	//get loader
 
 
-	chassis.moveToPoint(-38, 71.5,  3000,{.forwards = true, .maxSpeed = 80, .minSpeed = 60}, true);
+	chassis.moveToPoint(-38, 71,  3000,{.forwards = true, .maxSpeed = 75}, true);
 	chassis.waitUntilDone();
 	pros::delay(1500);
-	
-	chassis.moveToPoint(-38.5, 40,  800,{.forwards = false, .maxSpeed = 90}, true);
+	//DRIVE BACK TO LONG GOAL
+	chassis.moveToPoint(-38.2, 40,  800,{.forwards = false, .maxSpeed = 80}, true);
 	stage1.move(-20);
 	chassis.waitUntilDone();
 	stage1.move(127);
@@ -400,14 +414,13 @@ void skillsAuto()
 	// and the code combusts.
 	chassis.swingToHeading(90, DriveSide::LEFT, 500, {.direction = AngularDirection::CW_CLOCKWISE});
 	//drive to blocks
-	chassis.moveToPoint(24, 40,4500,{.forwards = true, .maxSpeed = 80, .minSpeed = 60}, true);
+	chassis.moveToPoint(24, 38,4500,{.forwards = true, .maxSpeed = 80}, true);
 	pros::delay(2000);
-	tongue.extend();
 
 	//turn to face mid goal
-	chassis.turnToHeading(45, 800);
-
-	chassis.moveToPoint(-0.8, 24.5,450,{.forwards = false, .maxSpeed = 95}, true); //move to mid goal
+	chassis.turnToHeading(35, 800);
+//SCORe MID GoAL 2
+	chassis.moveToPoint(11, 26,1000,{.forwards = false, .maxSpeed = 55}, true); //move to mid goal
 
 	stage1.move(-10);
 	stage2.move(-50);
@@ -420,27 +433,65 @@ void skillsAuto()
 	stage1.move(0);
 	stage2.move(0);
 	centerupper.retract();
-	tongue.retract();
 	//second half, go to loader
-	chassis.moveToPoint(46, 67,  4000,{.forwards = true, .maxSpeed = 100}, true);
+	chassis.moveToPoint(46, 55,  4000,{.forwards = true, .maxSpeed = 100}, true);
 	chassis.turnToHeading(-2, 800);
 	tongue.extend();
 
 	stage1.move(110);
-	chassis.moveToPoint(47.5, 81.5,  2000,{.forwards = true, .maxSpeed = 127, .minSpeed = 70}, true);
+	chassis.moveToPoint(47.5, 75,  2000,{.forwards = true, .maxSpeed = 75}, true);
 	pros::delay(2000);
 	stage1.move(60);
-	chassis.moveToPoint(46, 60,  4000,{.forwards = false, .maxSpeed = 100}, true);
+	chassis.moveToPoint(47.5, 55,  4000,{.forwards = false, .maxSpeed = 90}, true);
 
 	//turn around, tongue up
 	tongue.retract();
-	chassis.swingToHeading(190,  DriveSide::RIGHT, 1800, {.direction = AngularDirection::CW_CLOCKWISE});
+	chassis.swingToHeading(190,  DriveSide::RIGHT, 2000, {.direction = AngularDirection::CW_CLOCKWISE, .maxSpeed = 80});
 	chassis.waitUntilDone();
 	//other side
 	chassis.moveToPoint(53, -32, 4000,{.forwards = true, .maxSpeed = 127, .minSpeed = 90}, true);
 	chassis.turnToHeading(240, 800);
-	chassis.moveToPoint(44, -41, 3000,{.forwards = true, .maxSpeed = 127, .minSpeed = 60}, true);
+	chassis.moveToPoint(45, -41, 3000,{.forwards = true, .maxSpeed = 127, .minSpeed = 60}, true);
 	chassis.turnToHeading(-180, 800);
+	//outtake goal
+	chassis.moveToPoint(45.5, -20, 700, {.forwards = false, .maxSpeed = 100, .minSpeed = 90}, true);
+	chassis.waitUntilDone();
+	stage1.move(127);
+	stage2.move(127);
+	pros::delay(1500);
+	stage1.move(100);
+	stage2.move(0);
+
+	//loader again
+	chassis.moveToPoint(44.5 ,-58.5, 2000, {.forwards = true, .maxSpeed = 90}, true);
+	tongue.extend();
+
+	pros::delay(3400);
+	//long goal
+	chassis.moveToPoint(45.5, -20, 600,{.forwards = false, .maxSpeed = 100}, true);
+	chassis.waitUntilDone();
+	stage1.move(127);
+	stage2.move(127);
+	pros::delay(1500);
+	stage1.move(100);
+	stage2.move(0);
+	tongue.retract();
+	//push blocks and park
+	chassis.moveToPoint(26, -57.5, 5000,{.forwards = true, .maxSpeed = 127, .minSpeed = 60}, true);
+	chassis.turnToHeading(240, 800);
+	chassis.waitUntilDone();
+	stage1.move(127);
+	chassis.moveToPoint(-20, -58, 4000,{.forwards = true, .maxSpeed = 127, .minSpeed = 127}, true);
+	pros::delay(300);
+	// jiggle to clear park zone
+	tongue.extend();
+	chassis.moveToPoint(-22, -57.2, 600,{.forwards = true, .maxSpeed = 127, .minSpeed = 80}, true);
+	chassis.moveToPoint(-18.5, -58.8, 600,{.forwards = true, .maxSpeed = 127, .minSpeed = 80}, true);
+	chassis.moveToPoint(-25, -58, 2000,{.forwards = true, .maxSpeed = 127, .minSpeed = 127}, true);
+	pros::delay(1000);
+	stage1.move(0);
+	tongue.retract();
+	/*
 //outtake goal
 	chassis.moveToPoint(45.5, -20, 700, {.forwards = false, .maxSpeed = 100, .minSpeed = 90}, true);
 	chassis.waitUntilDone();
@@ -479,6 +530,185 @@ void skillsAuto()
 	pros::delay(1000);
 	stage1.move(0);
 	tongue.retract();
+	//V2 CODE
+// 	chassis.setPose(0,-48,0);
+// 	chassis.moveToPoint(0, -41, 500, {.maxSpeed = 100}, true); // move forward a bit. 
+// 	chassis.waitUntilDone();
+// 	chassis.turnToHeading(-55, 600); //turn to face first red block
+// 	chassis.waitUntilDone();
+// 	stage1.move(120);
+// 	chassis.moveToPoint(-27, -21.5, 1200, {.maxSpeed = 90}, true);//intake red block
+// 	chassis.turnToHeading(-140,600);
+// 	chassis.moveToPoint(-10, -9.5, 1250,{.forwards = false, .maxSpeed = 85}, true); 
+
+
+// 	//score mid goal
+// 	stage1.move(-5);
+// 	stage2.move(-50);
+// 	chassis.waitUntilDone(); 
+// 	centerupper.extend(); 
+// 	stage1.move(100);
+// 	stage2.move(100);
+// 	pros::delay(1400);
+// 	stage1.move(0);
+// 	stage2.move(0);
+// 	centerupper.retract();
+// 	chassis.moveToPoint(-42, -43.8,  1300,{.forwards = true, .maxSpeed = 90, .minSpeed = 50}, true); //move to left loader
+// 	tongue.extend();
+// 	chassis.waitUntilDone();
+// 	chassis.turnToHeading(180, 500);
+// 	chassis.waitUntilDone();
+
+// 	//LOADER 1 
+// 	stage1.move(127);
+// 	chassis.moveToPoint(-43, -59,  4000,{.forwards = true, .maxSpeed = 127, .minSpeed = 70}, true);
+// 	chassis.waitUntilDone();
+// 	pros::delay(1500);
+// 	stage1.move(70);
+// 	//back away from loader 	
+// 	chassis.moveToPoint(-43, -40,  1000,{.forwards = false, .maxSpeed = 127}, true);
+// 	//turn towards wall;
+// 	tongue.retract();
+// 	chassis.swingToHeading(15,  DriveSide::RIGHT, 2000, {.direction = AngularDirection::CW_CLOCKWISE}); //turn to face front
+// 	chassis.moveToPoint(-46.5, 56, 5000,{.forwards = true, .maxSpeed = 127, .minSpeed = 50}, true); //move to front wall
+
+// 	chassis.turnToHeading(-50, 800); //turn to face long goal
+// 	chassis.moveToPoint(-39.5, 51,  2000,{.forwards = false, .maxSpeed = 127}, true); //move to long goal //was 35 -> changed to 42
+// 	chassis.turnToHeading(0, 800);
+
+// 	//drive to long goal SCORE 1 
+// 	chassis.moveToPoint(-39.5, 34.5, 800,{.forwards = false, .maxSpeed = 100}, true); 
+// 	chassis.waitUntilDone();
+// 	//score long goal
+// 	stage1.move(-50);
+// 	tongue.extend();
+// 	pros::delay(300);
+// 	stage1.move(127);
+// 	stage2.move(127);
+// 	pros::delay(1500);
+// 	stage1.move(100);
+// 	stage2.move(0);
+
+// 	//get loader
+
+
+// 	chassis.moveToPoint(-39, 72,  3000,{.forwards = true, .maxSpeed = 80, .minSpeed = 60}, true); // changed from 35 to 42
+// 	chassis.waitUntilDone();
+// 	pros::delay(1500);
+	
+// 	chassis.moveToPoint(-39.5, 37,  800,{.forwards = false, .maxSpeed = 90}, true);
+// 	stage1.move(-20);
+// 	chassis.waitUntilDone();
+// 	stage1.move(127);
+// 	stage2.move(115);
+// 	pros::delay(1600);
+// 	stage1.move(120);
+// 	stage2.move(0);
+
+
+// 	tongue.retract();
+// 	//i dont know what the fuck is going on. if you remove this next line of code, it just doesnt fucking work #williamtangcrashout
+// 	// and the code combusts.
+// 	chassis.swingToHeading(90, DriveSide::LEFT, 500, {.direction = AngularDirection::CW_CLOCKWISE});
+// 	//drive to blocks
+// 	chassis.moveToPoint(24, 40,4500,{.forwards = true, .maxSpeed = 80, .minSpeed = 60}, true);
+// 	pros::delay(2000);
+// 	//tongue.extend();
+
+// 	//turn to face mid goal
+// 	chassis.turnToHeading(60, 800);
+// //MIDDLLE GOALLLL
+// 	chassis.moveToPoint(-4, 26,500,{.forwards = false, .maxSpeed = 95}, true); //move to mid goal
+
+// 	stage1.move(-10);
+// 	stage2.move(-50);
+
+// 	chassis.waitUntilDone(); 
+// 	centerupper.extend(); 
+// 	stage1.move(100);
+// 	stage2.move(100);
+// 	pros::delay(1700);
+// 	stage1.move(0);
+// 	stage2.move(0);
+// 	centerupper.retract();
+// 	//tongue.retract();
+// 	//second half, go to loader
+// 	chassis.moveToPoint(45, 67,  4000,{.forwards = true, .maxSpeed = 100}, true);
+// 	chassis.turnToHeading(-2, 800);
+// 	tongue.extend();
+
+// 	stage1.move(110);
+// 	chassis.moveToPoint(45, 83.5,  2000,{.forwards = true, .maxSpeed = 127, .minSpeed = 70}, true);
+// 	pros::delay(2000);
+// 	stage1.move(60);
+// 	chassis.moveToPoint(45, 60,  4000,{.forwards = false, .maxSpeed = 100}, true);
+
+// 	//turn around, tongue up
+// 	tongue.retract();
+// 	chassis.swingToHeading(190,  DriveSide::RIGHT, 1800, {.direction = AngularDirection::CW_CLOCKWISE});
+// 	chassis.waitUntilDone();
+// 	//other side
+// 	chassis.moveToPoint(53, -32, 4000,{.forwards = true, .maxSpeed = 127, .minSpeed = 90}, true);
+// 	chassis.turnToHeading(240, 1000, {.maxSpeed = 90});
+// 	chassis.moveToPoint(41, -39, 3000,{.forwards = true, .maxSpeed = 127, .minSpeed = 60}, true);
+// 	chassis.turnToHeading(-180, 800, {.maxSpeed = 45});
+// //outtake goal
+// 	chassis.moveToPoint(41, -20, 700, {.forwards = false, .maxSpeed = 100, .minSpeed = 90}, true);
+// 	chassis.waitUntilDone();
+// 	stage1.move(127);
+// 	stage2.move(127);
+// 	pros::delay(1500);
+// 	stage1.move(100);
+// 	stage2.move(0);
+
+// 	//loader again
+// 	chassis.moveToPoint(41, -58.5, 2000, {.forwards = true, .maxSpeed = 90}, true);
+// 	tongue.extend();
+
+// 	pros::delay(3400);
+// 	//long goal
+// 	chassis.moveToPoint(40.5, -12, 800,{.forwards = false, .maxSpeed = 100}, true);
+// 	chassis.waitUntilDone();
+// 	stage1.move(127);
+// 	stage2.move(127);
+// 	pros::delay(1500);
+// 	stage1.move(100);
+// 	stage2.move(0);
+// 	tongue.retract();
+// 	//push blocks and park parking
+// 	chassis.moveToPoint(18, -60, 5000,{.forwards = true, .maxSpeed = 127, .minSpeed = 60}, true);
+// 	//chassis.swingToHeading(260, DriveSide::LEFT, 500, {.direction = AngularDirection::CW_CLOCKWISE});
+// 	chassis.moveToPose(10, -65, 230,3000,{.forwards = true, .maxSpeed = 100, .minSpeed = 90}, true);
+// 	chassis.waitUntilDone();
+// 	tongue.extend();
+// 	stage1.move(127);
+// 	chassis.moveToPoint(-30, -65, 3000,{.forwards = true, .maxSpeed = 127, .minSpeed = 127}, true);
+// 	chassis.waitUntilDone();
+// 	pros::delay(2000);
+// 	stage1.move(0);
+	/*stage1.move(127); obsolete
+	pros::delay(700);
+	left_mg.move(127);
+	right_mg.move(127);
+	pros::delay(500);
+	tongue.extend();
+	pros::delay(1000);
+	tongue.retract();
+	left_mg.move(0);
+	right_mg.move(0);*/
+
+	//chassis.moveToPoint(26, -58, 5000,{.forwards = true, .maxSpeed = 127, .minSpeed = 60}, true);
+	// chassis.moveToPoint(-20, -58, 4000,{.forwards = true, .maxSpeed = 127, .minSpeed = 127}, true);
+	
+	// pros::delay(300);
+	// // jiggle to clear park zone
+	// tongue.extend();
+	// chassis.moveToPoint(-22, -57.2, 600,{.forwards = true, .maxSpeed = 127, .minSpeed = 80}, true);
+	// chassis.moveToPoint(-18.5, -58.8, 600,{.forwards = true, .maxSpeed = 127, .minSpeed = 80}, true);
+	// chassis.moveToPoint(-25, -58, 2000,{.forwards = true, .maxSpeed = 127, .minSpeed = 127}, true);
+	// pros::delay(1000);
+	// stage1.move(0);
+	// tongue.retract();
 	
 
 	// chassis.waitUntilDone();
@@ -504,6 +734,11 @@ void skillsAuto()
 }
 
 void autonomous() {
+// chassis.setPose(0, 0, 0); // set initial position to x:0, y:0, heading:0
+// chassis.moveToPoint(0,2,800, {.forwards = true, .maxSpeed = 127, .minSpeed = 100}, true);
+// soloawp();
+//rightsideauto();
+//leftsideauto();
 	skillsAuto();
 }
 
@@ -524,7 +759,7 @@ void opcontrol() {
 	while (true) {
 	
 		int dir = master.get_analog(ANALOG_LEFT_Y);    
-		int turn = master.get_analog(ANALOG_RIGHT_X); 
+		int turn = 0.96 * master.get_analog(ANALOG_RIGHT_X); 
 		left_mg.move(dir + turn);                   
 		right_mg.move(dir - turn);      
 		
@@ -545,8 +780,8 @@ void opcontrol() {
 	
 		}
 		else if (master.get_digital(DIGITAL_L2)){
-			stage1.move(82); //75
-			stage2.move(40);//70
+			stage1.move(127); //82
+			stage2.move(127);//40
 			centerupper.extend();
 
 		}
